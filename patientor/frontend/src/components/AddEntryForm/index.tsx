@@ -411,7 +411,7 @@ const AddEntryForm = ({
             size="small"
             disabled={loading}
           >
-            {loading ? 'ADDING...' : 'ADD'}
+            {loading ? 'Adding...' : 'Add'}
           </Button>
 
           <Button
@@ -421,7 +421,7 @@ const AddEntryForm = ({
             onClick={onCancel}
             disabled={loading}
           >
-            CANCEL
+            Cancel
           </Button>
         </Stack>
       </Stack>
