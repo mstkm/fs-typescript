@@ -4,6 +4,7 @@ import diagnosesService from "./services/diagnosisService.ts";
 import patientService from "./services/patientService.ts";
 import { NewPatientSchema } from "./utils.ts";
 import { z } from "zod";
+import { NewEntrySchema } from "./utils/patient.ts";
 
 const app = express();
 
@@ -20,6 +21,16 @@ app.get("/api/diagnoses", (_req, res) => {
 
 app.get("/api/patients", (_req, res) => {
   return res.json(patientService.getPatients());
+});
+
+app.get('/api/patients/:id', (req, res) => {
+  const patient = patientService.getPatient(req.params.id);
+
+  if (patient) {
+    res.json(patient);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 app.post('/api/patients', (req, res) => {
@@ -39,6 +50,33 @@ app.post('/api/patients', (req, res) => {
         error: 'Unknown error',
       });
     }
+  }
+});
+
+app.post('/api/patients/:id/entries', (req, res) => {
+  try {
+    const newEntry = NewEntrySchema.parse(req.body);
+
+    const addedEntry = patientService.addEntry(
+      req.params.id,
+      newEntry
+    );
+
+    if (!addedEntry) {
+      return res.sendStatus(404);
+    }
+
+    return res.status(201).json(addedEntry);
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        error: error.issues,
+      });
+    }
+
+    return res.status(500).json({
+      error: 'Internal server error',
+    });
   }
 });
 
