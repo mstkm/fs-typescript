@@ -77,7 +77,7 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
           size="small"
           onClick={() => setShowEntryForm(true)}
         >
-          ADD NEW ENTRY
+          Add New Entry
         </Button>
       )}
     </div>
